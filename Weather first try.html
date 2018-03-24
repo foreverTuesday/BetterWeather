@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>  
+ 
+   
+<script>
+function getWeatherDemo() {
+    $.get('https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast ' +
+          'where woeid in (select woeid from geo.places(1) where text="London")&format=json', function (data) {
+        console.log(data);
+        document.write("The temperatute in London is " +
+            data.query.results.channel.item.condition.temp +
+            data.query.results.channel.units.temperature
+        );
+    });
+} 
+    $( document ).ready(function() {
+    getWeatherDemo();
+});
+</script>
+
+</body>
+</html>
