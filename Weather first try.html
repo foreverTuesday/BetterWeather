@@ -15,14 +15,15 @@ Location:<br>
 function getWeather() {
     var location = document.getElementsByName("location")[0].value;
     $.get('https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast ' +
-          'where woeid in (select woeid from geo.places(1) where text="Boston")&format=json', function (data) {
+          'where woeid in (select woeid from geo.places(1) where text="'+location+'")&format=json', function (data) {
         console.log(data);
-        box.append("For Boston, tomorrow's high will be  " +
+        document.getElementById("box").innerHTML = "";
+        box.append("For "+location+", tomorrow's high will be  " +
            // data.query.results.channel.item.condition.temp +
            // data.query.results.channel.units.temperature +
                 data.query.results.channel.item.forecast[2].high +
                        " and tomorrow's low will be " +
-                       data.query.results.channel.item.forecast[2].low+location
+                       data.query.results.channel.item.forecast[2].low
         );
     });
 } 
