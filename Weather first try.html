@@ -3,20 +3,31 @@
 <body>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>  
  
+<form>
+Location:<br>
+  <input type="text" name="location"><br>
+</form>
+    <button onclick="getWeather()">Submit</button>
+    <div id="box"></div>
+    
    
 <script>
-function getWeatherDemo() {
+function getWeather() {
+    var location = document.getElementsByName("location")[0].value;
     $.get('https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast ' +
-          'where woeid in (select woeid from geo.places(1) where text="London")&format=json', function (data) {
+          'where woeid in (select woeid from geo.places(1) where text="Boston")&format=json', function (data) {
         console.log(data);
-        document.write("The temperatute in London is " +
-            data.query.results.channel.item.condition.temp +
-            data.query.results.channel.units.temperature
+        box.append("For Boston, tomorrow's high will be  " +
+           // data.query.results.channel.item.condition.temp +
+           // data.query.results.channel.units.temperature +
+                data.query.results.channel.item.forecast[2].high +
+                       " and tomorrow's low will be " +
+                       data.query.results.channel.item.forecast[2].low+location
         );
     });
 } 
     $( document ).ready(function() {
-    getWeatherDemo();
+    //getWeather();
 });
 </script>
 
