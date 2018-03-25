@@ -12,52 +12,56 @@ Location:<br>
     
    
 <script>
+  // LAT AND LONG ARE HARD CODED FYI AND I AM WORKING ON getLatAndLong(l)
 function getWeather() {
-    var location = "Mason, WA";//document.getElementsByName("location")[0].value;
-    var latitude = 42.3601;
-    var longitude = -71.0589;
-    $.getJSON('http://api.darksky.net/forecast/20a94cee4a0e829e9761ee9e6dc625c6/'+latitude+','+longitude, function(data) {
-      box.append(data);
-    });
-
-    // var xmlHttp = new XMLHttpRequest();
-    // xmlHttp.onreadystatechange = function() { 
-    //     if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-    //         callback(xmlHttp.responseText);
-    }
-    // xmlHttp.open("GET", 'https://api.darksky.net/forecast/20a94cee4a0e829e9761ee9e6dc625c6/'+latitude+','+longitude, true); // true for asynchronous 
-    // xmlHttp.send();
-    // box.append(xmlHttp.responseText);
-
-    // $.get('https://api.darksky.net/forecast/20a94cee4a0e829e9761ee9e6dc625c6/'+latitude+','+longitude, function (data) {
-    //     console.log(data);
-        
-    //     box.append("For "+location+", tomorrow's high will be  " +
-    //        // data.query.results.channel.item.condition.temp +
-    //        // data.query.results.channel.units.temperature +
-    //             data.daily.data.temperatureHigh +
-    //                    " and tomorrow's low will be " +
-    //                    data.daily.data.temperatureLow+location 
-    //     );
+    var location = document.getElementsByName("location")[0].value;
+    var latAndLong = getLatAndLong(location);
+    var latitude = "42.3601";
+    var longitude = "-71.0589";
+    const API_KEY = "20a94cee4a0e829e9761ee9e6dc625c6";
+    //https://api.darksky.net/forecast/20a94cee4a0e829e9761ee9e6dc625c6/42.3601,-71.0589
+    // $.getJSON(`https://api.darksky.net/forecast/${API_KEY}/${latitude},${longitude}`, function(forecast) {
+    //   box.append('https://api.darksky.net/forecast/20a94cee4a0e829e9761ee9e6dc625c6/42.3601,-71.0589');
     // });
 
-// function getDarkSkyWeather() {
-//    return  $.post(
-//         'https://apiv2.indico.io/political',
-//         JSON.stringify({
-//             'api_key': "5ca06cad390d60fb18f065997d116866",
-//             'data': article.description+article.title
-//         })
-//     ).then(function (res) {
-//         var r = JSON.parse(res);
-//         return [article, r.results];
-//     })
-// }
+    var proxy = 'https://cors-anywhere.herokuapp.com/';
+    var apiLinkDS = "https://api.darksky.net/forecast/20a94cee4a0e829e9761ee9e6dc625c6/42.3601,-71.0589";
+
+    $.ajax({
+      url: proxy + apiLinkDS,
+      success:function(data) { 
+        box.append(`For ${location}, tomorrow's high will be ${data.daily.data[0].temperatureHigh}
+          and tomorrow's low will be ${data.daily.data[0].temperatureLow}${data.daily.data[0].time}`);
+
+        // box.append(`Alerts: ${data.alerts[0].title} ${data.alerts[0].${data.alerts[0].description}`);
+      }
+    });
+  }
+
+function getLatAndLong(l) {
+  var location = l;
+  http://dev.virtualearth.net/REST/v1/Locations?q=Greenville&maxResults=10&key=BingMapsKey
+  http://dev.virtualearth.net/REST/v1/Locations/Eiffel%20Tower?o=xml&key=BingMapsKey
+
+  http://dev.virtualearth.net/REST/v1/Locations/1%20Microsoft%20Way%20Redmond%20WA%2098052?o=xml&key=BingMapsKey
+  http://dev.virtualearth.net/REST/v1/Locations?q=1%20Microsoft%20Way%20Redmond%20WA%2098052&o=xml&key=BingMapsKey
+  var myURL = "http://dev.virtualearth.net/REST/v1/Locations?q=";
+  $.ajax({
+    url: myURL,
+    success:function(data) { 
+      box.append(`For ${location}, tomorrow's high will be ${data.daily.data[0].temperatureHigh}
+        and tomorrow's low will be ${data.daily.data[0].temperatureLow}${data.daily.data[0].time}`);
+
+      // box.append(`Alerts: ${data.alerts[0].title} ${data.alerts[0].${data.alerts[0].description}`);
+    }
+  });
+
+}
+
 </script>
 
 </body>
 </html>
-
 <!-- 
 {
           "latitude": 42.3601,
@@ -128,7 +132,7 @@ function getWeather() {
               "summary": "Mixed precipitation throughout the week, with temperatures falling to 39°F on Saturday.",
               "icon": "rain",
               "data": [{
-                  "time": 1509944400,
+                  "time": 1509944400, 1509993277,
                   "summary": "Rain starting in the afternoon, continuing until evening.",
                   "icon": "rain",
                   "sunriseTime": 1509967519,
