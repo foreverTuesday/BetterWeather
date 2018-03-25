@@ -77,20 +77,17 @@ function getWeather() {
 
     // ----------- access the AccuWeather api ----------- //
 
-      var accuWeatherURL = `http://dataservice.accuweather.com//locations/v1/cities/geoposition/search?apikey=yl0a52Adqm5OHzGzAZ3rDJP5RyGWR2EQ&q=${latitude}%2C${longitude}&language=en-us&details=false&toplevel=false`;
-      $.ajax({ 
-           url : `http://dataservice.accuweather.com//locations/v1/cities/geoposition/search?apikey=yl0a52Adqm5OHzGzAZ3rDJP5RyGWR2EQ&q=${latitude}%2C${longitude}&language=en-us&details=false&toplevel=false`,
-          success : function(data) {
-            document.getElementById("accuWeatherBox").innerHTML = "";
-            accuWeatherBox.append("ACCUWEATHER BOX:");
-            accuWeatherBox.append(`Tomorrow's Temperature Minimum (F): ` + data.DailyForecasts[0].Temperature.Minimum.Value+ "\n\rTomorrow's Temperature Maximum (F): " + data.DailyForecasts[0].Temperature.Maximum.Value);           
-          }
-        }); 
-      // $.get('http://dataservice.accuweather.com/forecasts/v1/daily/1day/348735?apikey=yl0a52Adqm5OHzGzAZ3rDJP5RyGWR2EQ&language=en-us&details=false&metric=false', function (data) {
-      // document.getElementById("accuWeatherBox").innerHTML = "";
-      // accuWeatherBox.append("ACCUWEATHER BOX:");
-      // accuWeatherBox.append("Tomorrow's Temperature Minimum (F): " + data.DailyForecasts[0].Temperature.Minimum.Value+ "\n\rTomorrow's Temperature Maximum (F): " + data.DailyForecasts[0].Temperature.Maximum.Value);
-      // });
+
+     $.ajax({
+    url: location_url,
+    success:function(data) { 
+      $.get('http://dataservice.accuweather.com//locations/v1/cities/geoposition/search?apikey=sSpt4Yo1OOKIxUXzi7YTNmfxK2sZDMET&q='+latitude+'%2C'+longitude+'&language=en-us&details=true&toplevel=false', function (data2) {
+      $.get('http://dataservice.accuweather.com/forecasts/v1/daily/1day/'+data2.Key+'?apikey=sSpt4Yo1OOKIxUXzi7YTNmfxK2sZDMET&language=en-us&details=true&metric=false', function (data) {
+          document.getElementById("accuWeatherBox").innerHTML = "";
+          accuWeatherBox.append("Tomorrow's Temperature Minimum (F): " + data.DailyForecasts[0].Temperature.Minimum.Value+ "\n\rTomorrow's Temperature Maximum (F): " + data.DailyForecasts[0].Temperature.Maximum.Value);
+      });        
+      });     
+  }});      
 
     // ----------- access the Yahoo Weather api ----------- //
       $.get('https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast ' +
