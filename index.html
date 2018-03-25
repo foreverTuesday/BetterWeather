@@ -76,12 +76,14 @@ function getWeather() {
       }); 
 
     // ----------- access the AccuWeather api ----------- //
+
+      var accuWeatherURL = `http://dataservice.accuweather.com//locations/v1/cities/geoposition/search?apikey=yl0a52Adqm5OHzGzAZ3rDJP5RyGWR2EQ&q=${latitude}%2C${longitude}&language=en-us&details=false&toplevel=false`;
       $.ajax({ 
-          url : "http://dataservice.accuweather.com/forecasts/v1/daily/1day/348735?apikey=yl0a52Adqm5OHzGzAZ3rDJP5RyGWR2EQ&language=en-us&details=false&metric=false",
+           url : `http://dataservice.accuweather.com//locations/v1/cities/geoposition/search?apikey=yl0a52Adqm5OHzGzAZ3rDJP5RyGWR2EQ&q=${latitude}%2C${longitude}&language=en-us&details=false&toplevel=false`,
           success : function(data) {
             document.getElementById("accuWeatherBox").innerHTML = "";
             accuWeatherBox.append("ACCUWEATHER BOX:");
-            accuWeatherBox.append(`Tomorrow's Temperature Minimum in ${location}(F): ` + data.DailyForecasts[0].Temperature.Minimum.Value+ "\n\rTomorrow's Temperature Maximum (F): " + data.DailyForecasts[0].Temperature.Maximum.Value);           
+            accuWeatherBox.append(`Tomorrow's Temperature Minimum (F): ` + data.DailyForecasts[0].Temperature.Minimum.Value+ "\n\rTomorrow's Temperature Maximum (F): " + data.DailyForecasts[0].Temperature.Maximum.Value);           
           }
         }); 
       // $.get('http://dataservice.accuweather.com/forecasts/v1/daily/1day/348735?apikey=yl0a52Adqm5OHzGzAZ3rDJP5RyGWR2EQ&language=en-us&details=false&metric=false', function (data) {
