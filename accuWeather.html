@@ -14,10 +14,10 @@ Location:<br>
 <script>
 function getWeather() {
     var location = document.getElementsByName("location")[0].value;
-    $.get('http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/348735?apikey=yl0a52Adqm5OHzGzAZ3rDJP5RyGWR2EQ&language=en-us&details=false&metric=false', function (data) {
+    $.get('http://dataservice.accuweather.com/forecasts/v1/daily/1day/348735?apikey=yl0a52Adqm5OHzGzAZ3rDJP5RyGWR2EQ&language=en-us&details=false&metric=false', function (data) {
         console.log(data);
         document.getElementById("box").innerHTML = "";
-        box.append("Today's Temperature: " + data[0].Temperature.Value);
+        box.append("Tomorrow's Temperature Minimum (F): " + data.DailyForecasts[0].Temperature.Minimum.Value+ "\n\rTomorrow's Temperature Maximum (F): " + data.DailyForecasts[0].Temperature.Maximum.Value);
     });
 } 
     $( document ).ready(function() {
