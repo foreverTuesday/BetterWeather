@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>  
+ 
+<form>
+Location:<br>
+  <input type="text" name="location"><br>
+</form>
+    <button onclick="getWeather()">Submit</button>
+    <div id="box"></div>
+    
+   
+<script>
+function getWeather() {
+    var location = document.getElementsByName("location")[0].value;
+    $.get('http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/348735?apikey=yl0a52Adqm5OHzGzAZ3rDJP5RyGWR2EQ&language=en-us&details=false&metric=false', function (data) {
+        console.log(data);
+        document.getElementById("box").innerHTML = "";
+        box.append("Today's Temperature: " + data[0].Temperature.Value);
+    });
+} 
+    $( document ).ready(function() {
+    //getWeather();
+});
+</script>
+
+</body>
+</html>
