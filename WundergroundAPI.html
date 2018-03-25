@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>  
+ 
+    
+    
+  
+<script>
+jQuery(document).ready(function($) {
+  $.ajax({
+  url : "http://api.wunderground.com/api/43d773478217dded/geolookup/forecast/q/02465.json",
+  dataType : "jsonp",
+  success : function(parsed_json) {
+  var location = parsed_json['location']['city'];
+  var high = parsed_json['forecast']['simpleforecast']['forecastday'][1]['high']['fahrenheit'];
+  var low = parsed_json['forecast']['simpleforecast']['forecastday'][1]['low']['fahrenheit'];
+  document.write("For " + location + ", the high will be " + high + " and the low will be " + low);
+  }
+  });
+});
+</script>
+
+</body>
+</html>
+
+
+<!--Created using Wunderground weather API-->
