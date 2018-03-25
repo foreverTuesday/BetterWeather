@@ -182,6 +182,10 @@
       var city;
       var state;
       var mymap;
+      var min_array = [];
+      var max_array = [];
+      var min_avg;
+      var max_avg;
 
     /// LOCATION not PLACE
     function getWeather() {
@@ -199,6 +203,7 @@
         state = location.split(", ")[1];
         var location_url = `http://dev.virtualearth.net/REST/v1/Locations?q=1${finalCityString}%20${state}&o=json&key=${LOCATION_API_KEY}`;
 
+
       $.ajax({
         // ------ access the latitude and longitude api ------- //
           url: location_url,
@@ -213,6 +218,9 @@
             url: proxy + apiLinkDS,
             success:function(data) {
               document.getElementById("darkSkyBox").innerHTML = "";
+              min_array.push(data.daily.data[0].temperatureHigh);
+              max_array.push(data.daily.data[0].temperatureLow);
+
               //darkSkyBox.append("DARK SKY BOX:");
               darkSkyBox.append(`For ${location}, tomorrow's high will be ${data.daily.data[0].temperatureHigh}
                 and tomorrow's low will be ${data.daily.data[0].temperatureLow}`);
@@ -228,7 +236,9 @@
               var high = parsed_json['forecast']['simpleforecast']['forecastday'][1]['high']['fahrenheit'];
               var low = parsed_json['forecast']['simpleforecast']['forecastday'][1]['low']['fahrenheit'];
               document.getElementById("wundergroundBox").innerHTML = "";
-              wundergroundBox.append("WUNDERGROUND BOX:");
+              min_array.push(high);
+              max_array.push(low);
+              //wundergroundBox.append("WUNDERGROUND BOX:");
               wundergroundBox.append("For " + location + ", the high will be " + high + " and the low will be " + low);
             }
           });
@@ -243,6 +253,8 @@
       //     $.get('http://dataservice.accuweather.com/forecasts/v1/daily/1day/'+data2.Key+'?apikey=sSpt4Yo1OOKIxUXzi7YTNmfxK2sZDMET&language=en-us&details=true&metric=false', function (data) {
       //         document.getElementById("accuWeatherBox").innerHTML = "";
       //         accuWeatherBox.append("Tomorrow's Temperature Minimum (F): " + data.DailyForecasts[0].Temperature.Minimum.Value+ "\n\rTomorrow's Temperature Maximum (F): " + data.DailyForecasts[0].Temperature.Maximum.Value);
+      //         min_array.push(data.DailyForecasts[0].Temperature.Maximum.Value);
+      //         max_array.push(data.DailyForecasts[0].Temperature.Minimum.Value);
       //     });
       //     });
       // }});
@@ -252,6 +264,8 @@
                 'where woeid in (select woeid from geo.places(1) where text="'+location+'")&format=json', function (data) {
               document.getElementById("yahooBox").innerHTML = "";
               //yahooBox.append("YAHOO BOX:");
+              min_array.push(data.query.results.channel.item.forecast[2].high);
+              max_array.push(data.query.results.channel.item.forecast[2].low);
               yahooBox.append("For "+location+", tomorrow's high will be  " +
                       data.query.results.channel.item.forecast[2].high +
                              " and tomorrow's low will be " +
@@ -269,6 +283,19 @@
               id: 'mapbox.pirates',
               accessToken: 'your.mapbox.access.token'
           }).addTo(mymap);
+
+          console.log(min_array);
+          console.log(max_array);
+          var min_sum = 0;
+          for( var i = 0; i < min_array.length; i++ ){
+            min_sum += parseInt( min_array[i]); //don't forget to add the base
+          }
+
+          var min_avg = min_sum/min_array.length;
+          console.log(min_avg);
+          console.log(min_array.length);
+
+
 
         }
       });
