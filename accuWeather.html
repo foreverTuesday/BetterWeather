@@ -35,7 +35,7 @@ function getWeather() {
       latitude = data.resourceSets[0].resources[0].geocodePoints[0].coordinates[0];
       longitude = data.resourceSets[0].resources[0].geocodePoints[0].coordinates[1];
       var apiLinkDS = `https://api.darksky.net/forecast/20a94cee4a0e829e9761ee9e6dc625c6/${latitude},${longitude}`;
-      $.get('http://dataservice.accuweather.com//locations/v1/cities/geoposition/search?apikey=yl0a52Adqm5OHzGzAZ3rDJP5RyGWR2EQ&q=42.3601%2C-71.0589&language=en-us&details=false&toplevel=false', function (data2) {
+      $.get('http://dataservice.accuweather.com//locations/v1/cities/geoposition/search?apikey=yl0a52Adqm5OHzGzAZ3rDJP5RyGWR2EQ&q='+latitude+'%2C'+longitude+'&language=en-us&details=false&toplevel=false', function (data2) {
         console.log(data2.Key);
     $.get('http://dataservice.accuweather.com/forecasts/v1/daily/1day/'+data2.Key+'?apikey=yl0a52Adqm5OHzGzAZ3rDJP5RyGWR2EQ&language=en-us&details=false&metric=false', function (data) {
         console.log(data);
@@ -46,12 +46,7 @@ function getWeather() {
     });
 
   }});
-    var location = document.getElementsByName("location")[0].value;
-    $.get('http://dataservice.accuweather.com/forecasts/v1/daily/1day/348735?apikey=yl0a52Adqm5OHzGzAZ3rDJP5RyGWR2EQ&language=en-us&details=false&metric=false', function (data) {
-        console.log(data);
-        document.getElementById("box").innerHTML = "";
-        box.append("Tomorrow's Temperature Minimum (F): " + data.DailyForecasts[0].Temperature.Minimum.Value+ "\n\rTomorrow's Temperature Maximum (F): " + data.DailyForecasts[0].Temperature.Maximum.Value);
-    });
+    
 } 
     $( document ).ready(function() {
     //getWeather();
