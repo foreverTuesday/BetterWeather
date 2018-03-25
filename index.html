@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>  
+ 
+    <form>
+Location:<br>
+  <input type="text" name="location" ><br>
+</form>
+    <!-- Dark Sky API -->
+    <button onclick="getWeather()">Submit</button>
+    <div id="darkSkyBox"></div>
+
+    <!-- Wunderground API -->
+    <div id="wundergroundBox"></div>
+
+    <!-- Yahoo Weather API -->
+    <div id="yahooBox"></div>
+
+    <!-- AccuWeather API -->
+    <div id="accuWeatherBox"></div>
+
+    
+<script>
+  var latitude;
+  var longitude;
+  var city;
+  var state;
+/// LOCATION not PLACE
+function getWeather() {
+    var location = document.getElementsByName("location")[0].value;
+    const DARK_SKY_API_KEY = "20a94cee4a0e829e9761ee9e6dc625c6";
+    const LOCATION_API_KEY = "Au_bF_9s7xEZp0TZ5rYiD_3p2BWI0WdUIAT5vnLnf8CVjip4RJ9Rv7y3KDerY9nA";
+    city = location.split(", ")[0];
+    var cityArray = city.split(" ");
+    var cityLength = cityArray.length;
+    var finalCityString = "";
+    for ( i = 0; i < cityLength; i++) {
+      finalCityString += `%20${cityArray[i]}`;
+    }
+    state = location.split(", ")[1];
+    var location_url = `http://dev.virtualearth.net/REST/v1/Locations?q=1${finalCityString}%20${state}&o=json&key=${LOCATION_API_KEY}`;
+  
+  $.ajax({
+    // ------ access the latitude and longitude api ------- //
+      url: location_url,
+      success:function(data) { 
+        latitude = data.resourceSets[0].resources[0].geocodePoints[0].coordinates[0];
+        longitude = data.resourceSets[0].resources[0].geocodePoints[0].coordinates[1];
+
+    // ------------- access the dark sky api -------------- //
+        var proxy = 'https://cors-anywhere.herokuapp.com/';
+        var apiLinkDS = `https://api.darksky.net/forecast/20a94cee4a0e829e9761ee9e6dc625c6/${latitude},${longitude}`;
+      $.ajax({
+        url: proxy + apiLinkDS,
+        success:function(data) { 
+          document.getElementById("darkSkyBox").innerHTML = "";       
+          darkSkyBox.append("DARK SKY BOX:");   
+          darkSkyBox.append(`For ${location}, tomorrow's high will be ${data.daily.data[0].temperatureHigh}
+            and tomorrow's low will be ${data.daily.data[0].temperatureLow}`);
+        }
+      });
+
+    // ----------- access the wunderground api ----------- //
+      $.ajax({ 
+        url : "http://api.wunderground.com/api/43d773478217dded/geolookup/forecast/q/"+location+".json",
+        dataType : "jsonp",
+        success : function(parsed_json) {
+          var location = parsed_json['location']['city'];
+          var high = parsed_json['forecast']['simpleforecast']['forecastday'][1]['high']['fahrenheit'];
+          var low = parsed_json['forecast']['simpleforecast']['forecastday'][1]['low']['fahrenheit'];
+          document.getElementById("wundergroundBox").innerHTML = "";
+          wundergroundBox.append("WUNDERGROUND BOX:");   
+          wundergroundBox.append("For " + location + ", the high will be " + high + " and the low will be " + low);
+        }
+      }); 
+
+    // ----------- access the AccuWeather api ----------- //
+      $.ajax({ 
+          url : "http://dataservice.accuweather.com/forecasts/v1/daily/1day/348735?apikey=yl0a52Adqm5OHzGzAZ3rDJP5RyGWR2EQ&language=en-us&details=false&metric=false",
+          success : function(data) {
+            document.getElementById("accuWeatherBox").innerHTML = "";
+            accuWeatherBox.append("ACCUWEATHER BOX:");
+            accuWeatherBox.append(`Tomorrow's Temperature Minimum in ${location}(F): ` + data.DailyForecasts[0].Temperature.Minimum.Value+ "\n\rTomorrow's Temperature Maximum (F): " + data.DailyForecasts[0].Temperature.Maximum.Value);           
+          }
+        }); 
+      // $.get('http://dataservice.accuweather.com/forecasts/v1/daily/1day/348735?apikey=yl0a52Adqm5OHzGzAZ3rDJP5RyGWR2EQ&language=en-us&details=false&metric=false', function (data) {
+      // document.getElementById("accuWeatherBox").innerHTML = "";
+      // accuWeatherBox.append("ACCUWEATHER BOX:");
+      // accuWeatherBox.append("Tomorrow's Temperature Minimum (F): " + data.DailyForecasts[0].Temperature.Minimum.Value+ "\n\rTomorrow's Temperature Maximum (F): " + data.DailyForecasts[0].Temperature.Maximum.Value);
+      // });
+
+    // ----------- access the Yahoo Weather api ----------- //
+      $.get('https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast ' +
+            'where woeid in (select woeid from geo.places(1) where text="'+location+'")&format=json', function (data) {
+          document.getElementById("yahooBox").innerHTML = "";
+          yahooBox.append("YAHOO BOX:");
+          yahooBox.append("For "+location+", tomorrow's high will be  " +
+                  data.query.results.channel.item.forecast[2].high +
+                         " and tomorrow's low will be " +
+                         data.query.results.channel.item.forecast[2].low
+          );
+      }); 
+
+    }
+  });
+
+  }
+
+
+  
+    
+</script>
+
+</body>
+</html>
+
+
+<!--Created using Wunderground weather API-->
